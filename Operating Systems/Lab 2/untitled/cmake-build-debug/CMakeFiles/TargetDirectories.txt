@@ -1,0 +1,5 @@
+/home/bubun/CLionProjects/untitled/cmake-build-debug/CMakeFiles/Numbers.dir
+/home/bubun/CLionProjects/untitled/cmake-build-debug/CMakeFiles/Vector.dir
+/home/bubun/CLionProjects/untitled/cmake-build-debug/CMakeFiles/untitled.dir
+/home/bubun/CLionProjects/untitled/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/bubun/CLionProjects/untitled/cmake-build-debug/CMakeFiles/rebuild_cache.dir
