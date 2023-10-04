@@ -6,7 +6,7 @@
 std::vector<double> generateVectorB(size_t size) {
     std::vector<double>  ans(size, 0);
     for (size_t i = 0; i < size; ++i) {
-        ans[i] = 23 + i;
+        ans[i] = 14 + i;
     }
     return ans;
 }
