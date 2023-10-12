@@ -6,7 +6,7 @@
 #include <chrono>
 #include <string>
 
-int size = 1000;
+int size = 1800;
 int m = 14;
 int k = 2;
 
@@ -35,12 +35,12 @@ std::vector<float> multiply(std::vector<std::vector<float>> A, std::vector<float
 std::vector<std::vector<float>> generateMatrix(int size) {
     std::vector<std::vector<float>> A(size+1, std::vector<float>(size+1, 0));
     A[0][0] = m;
-    A[0][1] = -(m-1);
+    A[0][1] = (m-1);
 
     for (int i = 1; i < size; i++){
         A[i][i-1] = -k;
         A[i][i] = m + k + (i - 1);
-        A[i][i+1] = -(m + (i-1));
+        A[i][i+1] = (m + (i-1));
     }
 
     A[size][size-1] = -k;
@@ -52,25 +52,25 @@ std::vector<std::vector<float>> generateMatrix(int size) {
 std::vector<float> ForwardRunThrough(std::vector<std::vector<float>> &A, std::vector<float>& f)
 {
     std::vector<float> z(size+1, 0);
-    std::vector<float> b(size+1, 0);
+    std::vector<float> y(size+1, 0);
 
-    z[0] = A[0][1] / A[0][0];
-    b[0] = f[0] / A[0][0];
-
-    for (int i = 0; i < size-1; i++)
+    z[0] = -(A[0][1]) / A[0][0];
+    y[0] = f[0] / A[0][0];
+    
+    for (int i = 1; i < size; i++)
     {
-        z[i+1] = b[i]/(A[i][i] - z[i]*A[i][i-1]);
-        b[i+1] = (f[i] + A[i][i-1] * b[i])/(A[i][i] - z[i]*A[i][i-1]);
+        z[i] = -(A[i][i+1]/(A[i][i] + A[i][i-1]*z[i-1]));
+        y[i] = (f[i] - A[i][i-1]*y[i-1])/(A[i][i] + A[i][i-1] * z[i-1]);
     }
-    b[size] = (f[size-1] + A[size-1][size-2] * b[size-1])/(A[size-1][size-1] - z[size-1]*A[size-1][size-2]);
+    y[size] = (f[size] - A[size][size-1] * y[size-1])/(A[size][size] + z[size-1]*A[size][size-1]);
 
 
-    std::vector<float> ans(size, 0);
-    ans[size] = b[size];
+    std::vector<float> ans(size+1, 0);
+    ans[size] = y[size];
 
     for (int i = size-1; i >= 0; i--)
     {
-        ans[i] = z[i] + ans[i+1] + b[i+1];
+        ans[i] = z[i] * ans[i+1] + y[i];
     }
     
     return ans;
