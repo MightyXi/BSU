@@ -5,9 +5,15 @@ body{
     margin: 40px;
 }
 
+.components{
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+}
+
 .element{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     padding: 0px 5px;
 }
 
@@ -17,12 +23,6 @@ body{
 
 .element input{
     width: 70px;
-}
-
-.components{
-    align-self: center;
-    display: flex;
-    flex-direction: row;
 }
 
 .component{
@@ -60,4 +60,7 @@ body{
     flex-direction: column;
 }
 
+.colorname{
+    padding-right: 10px;
+}
     
