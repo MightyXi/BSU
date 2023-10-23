@@ -7,8 +7,8 @@ var hsv_in = document.getElementsByClassName("hsv-in");
 var chooser = document.getElementById("chooser");
 
 
-changeCanvas(0,0,0);
-function changeCanvas(r,g,b){
+update(0,0,0);
+function update(r,g,b){
     document.body.style.backgroundColor = 'rgb(' + r + ', ' + g + ', ' + b + ')';  
     var text = document.getElementById("text"); 
     text.style.color = 'rgb(' + (255-r) + ', ' + (255-g) + ', ' + (255-b) + ')'; 
@@ -95,11 +95,13 @@ function rgbToHsv(r, g, b) {
   s = +(s * 100).toFixed(1);
   l = +(l * 100).toFixed(1);
 
-  return [h, s,l]
+  const round = (num) => Math.round(num);
+
+  return [h, round(s),round(l)]
   }
   
   function hsvToRgb(h, s, l) {
-   h /= 360;
+h /= 360;
   s /= 100;
   l /= 100;
 
@@ -225,32 +227,32 @@ function getHSVin(){
 
 function cmykSlider(){
     changeFromCmyk.apply(this, getCMYK());
-    changeCanvas(rgb_slider[0].value, rgb_slider[1].value, rgb_slider[2].value);
+    update(rgb_slider[0].value, rgb_slider[1].value, rgb_slider[2].value);
 }
 
 function cmykIn(){
     setCmyk.apply(this,getCMYKin());
     changeFromCmyk.apply(this,getCMYKin());
-    changeCanvas(rgb_in[0].value, rgb_in[1].value, rgb_in[2].value);
+    update(rgb_in[0].value, rgb_in[1].value, rgb_in[2].value);
 }
 
 function rgbSlider(){
     changeFromRgb.apply(this, getRGB());
-    changeCanvas(rgb_slider[0].value, rgb_slider[1].value, rgb_slider[2].value);
+    update(rgb_slider[0].value, rgb_slider[1].value, rgb_slider[2].value);
 }
 
 function rgbIn(){
     setRgb.apply(this,getRGBin());
     changeFromRgb.apply(this,getRGBin());
-    changeCanvas(rgb_in[0].value, rgb_in[1].value, rgb_in[2].value);
+    update(rgb_in[0].value, rgb_in[1].value, rgb_in[2].value);
 }
 
 function hsvIn(){
     setHsv.apply(this,getHSVin());
     changeFromHsv.apply(this,getHSVin());
-    changeCanvas(rgb_in[0].value, rgb_in[1].value, rgb_in[2].value);
+    update(rgb_in[0].value, rgb_in[1].value, rgb_in[2].value);
 }
 function hsvSlider(){
     changeFromHsv.apply(this, getHSV());
-    changeCanvas(rgb_slider[0].value, rgb_slider[1].value, rgb_slider[2].value);
+    update(rgb_slider[0].value, rgb_slider[1].value, rgb_slider[2].value);
 }
