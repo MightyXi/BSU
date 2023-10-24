@@ -5,6 +5,8 @@
 
 int size = 4;
 int m = 14;
+float eps = 0.0001;
+kmax = 1000;
 
 std::vector<float> generateVectorX() {
     std::vector<float>  x(size, 0);
@@ -42,32 +44,30 @@ std::vector<std::vector<float>> generateMatrix() {
     return A;
 }
 
-std::vector<float> ForwardRunThrough(std::vector<std::vector<float>> &A, std::vector<float>& f)
+std::vector<float> JakobiMethod(std::vector<std::vector<float>> &A, std::vector<float>& f)
 {
-    std::vector<float> z(size, 0);
-    std::vector<float> y(size, 0);
-
-    z[0] = -(A[0][1]) / A[0][0];
-    y[0] = f[0] / A[0][0];
-
-    for (int i = 1; i < size; i++)
-    {
-        z[i] = -(A[i][i+1]/(A[i][i] + A[i][i-1]*z[i-1]));
-        y[i] = (f[i] - A[i][i-1]*y[i-1])/(A[i][i] + A[i][i-1] * z[i-1]);
-    }
-    y[size] = (f[size] - A[size][size-1] * y[size-1])/(A[size][size] + z[size-1]*A[size][size-1]);
-
-
     std::vector<float> ans(size, 0);
-    ans[size] = y[size];
+    //первая итерация
+    for (int i = 0; i < size; ++i) {
+        ans[i] = f[i]/A[i][i];
+    }
+    for (int k = 1; k <= kmax; ++k) {
+        for (int i = 0; i < size; ++i) {
+            float sum = f[i];
+            for (int j = 0; j < i; ++j) {
+                sum-=
+            }
 
-    for (int i = size-1; i >= 0; i--)
-    {
-        ans[i] = z[i] * ans[i+1] + y[i];
+            for (int j = i+1; j < size; ++j) {
+                
+            }
+        }
     }
 
     return ans;
 }
+
+
 
 
 
@@ -98,7 +98,7 @@ int main()
     std::vector<float> f = multiply(matrix, x);
 
     std::vector<float> ans = ForwardRunThrough(matrix, f);
-    
+
 
 
     std::cout << "5 cordinats of solution ";
