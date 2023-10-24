@@ -2,7 +2,7 @@
 #include <vector>
 #include <cmath>
 
-int size = 4;
+int size = 10;
 int m = 14;
 float eps = 0.0001;
 int kmax = 1000;
@@ -10,7 +10,7 @@ int kmax = 1000;
 std::vector<float> generateVectorX() {
     std::vector<float>  x(size, 0);
     for (int i = 0; i < size; ++i) {
-        x[i] = i + m;
+        x[i] = (float)i + (float)m;
     }
     return x;
 }
@@ -96,7 +96,7 @@ void RelaxationMethod(std::vector<std::vector<float>> &A, std::vector<float>& f,
 {
     std::vector<float> ans(size, 0);
     std::vector<float> copy(size, 0);
-    //первая итерация
+
     for (int i = 0; i < size; ++i) {
         ans[i] = f[i]/A[i][i];
         copy[i] = ans[i];
@@ -136,11 +136,14 @@ int main()
     std::vector<std::vector<float>> matrix = generateMatrix();
     std::vector<float> x = generateVectorX();
     std::vector<float> f = multiply(matrix, x);
-
+    //метод якоби
     JakobiMethod(matrix, f);
-
-    RelaxationMethod(matrix, f, 0.5);
+    
+    //метод Гаусса-Зейделя
     RelaxationMethod(matrix, f, 1);
-    RelaxationMethod(matrix, f, 2);
+
+    //метод релаксации
+    RelaxationMethod(matrix, f, 0.5);
+    RelaxationMethod(matrix, f, 1.5);
     return 0;
 }
