@@ -1,14 +1,13 @@
 #include <iostream>
 #include <vector>
-#include <stdlib.h>
-#include <ctime>
 #include <cmath>
 #include <chrono>
 
-int size = 3;
+int size = 1700;
 int m = 14;
 int k = 2;
 int lit = 50;
+double eps = 0.0001;
 
 std::vector<double> generateVectorF(size_t size) {
     std::vector<double>  ans(size, 0);
@@ -20,9 +19,9 @@ std::vector<double> generateVectorF(size_t size) {
 
 double scalMul(std::vector<double> x, std::vector<double> y) {
     double ans = 0;
-        for (int i = 0; i < x.size(); i++) {
-            ans += x[i]*y[i];
-        }
+    for (int i = 0; i < x.size(); i++) {
+        ans += x[i]*y[i];
+    }
     return ans;
 }
 
@@ -161,10 +160,18 @@ double relativeError(std::vector<double> x_, std::vector<double> x) {
     return max_1 / max_2;
 }
 
+bool check(std::vector<double> &ans){
+    for (int i = 0; i < size; ++i){
+        if (std::abs(ans[i]) <= eps)
+            return true;
+    }
+    return false;
+}
+
 std::vector<double> cg(std::vector<std::vector<double>> &A, std::vector<double> &f, std::vector<double> &xZero){
     std::vector<double> xl = xZero;
     std::vector<double> fslae(size);
-    std::vector<double> mvxl = f;
+    std::vector<double> mvxl = multiply(A, xl);
     for (size_t i = 0; i < size; i++){
         fslae[i] = f[i];
         xl[i] = xZero[i];
@@ -186,22 +193,30 @@ std::vector<double> cg(std::vector<std::vector<double>> &A, std::vector<double> 
 
         double alpha = rl_rl/scal_mvpl_pl;
         for (size_t j = 0; j < size; j++){
-            xl[j] += alpha*pl[i];
-            rl[j] -= alpha*mvpl[i];
+            xl[j] += alpha*pl[j];
+            rl[j] -= alpha*mvpl[j];
         }
 
         scal_rl_rl = scalMul(rl, rl);
         double beta = scal_rl_rl/rl_rl;
 
         for (size_t j = 0; j < size; j++){
-            pl[j] = rl[i] +beta*pl[i];
+            pl[j] = rl[j] +beta*pl[j];
         }
+        if (check(xl))
+            break;
     }
-
-
     return xl;
 }
 
+double vectorNevyazki(std::vector<std::vector<double>> &matrix,const std::vector<double> &x_counted, std::vector<double> &f) {
+    std::vector<double> f_new = multiply(matrix, x_counted);
+    double max = -1;
+    for (int i = 0; i < size; i++) {
+        max = std::max(std::abs(f_new[i] - f[i]), max);
+    }
+    return max;
+}
 
 int main()
 {
@@ -223,6 +238,7 @@ int main()
     std::cout << "5 cordinats of solution ";
     print5(x_);
     std::cout << "otnositelnaya pogreshnost " << relativeError(x_, x) << "\n";
+    std::cout << "Norma vectora nevyazki " << vectorNevyazki(matrix, x_, f) << "\n";
     std::cout << "Runtime " << time1 << " ms\n";
 
     std::cout << "LDL\n";
@@ -231,6 +247,7 @@ int main()
     print5(y);
 
     std::cout << "Otnositelnaya pogreshnost " << relativeError(y, x) << "\n";
+    std::cout << "Norma vectora nevyazki " << vectorNevyazki(matrix, y, f) << "\n";
     std::cout << "Runtime " << time2 << " ms\n";
     return 0;
 }
