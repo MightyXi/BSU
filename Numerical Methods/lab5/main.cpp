@@ -3,11 +3,12 @@
 #include <cmath>
 #include <chrono>
 
-int size = 1700;
+int size = 2000;
 int m = 14;
 int k = 2;
-int lit = 50;
+int lit = 100;
 double eps = 0.0001;
+int kmain;
 
 std::vector<double> generateVectorF(size_t size) {
     std::vector<double>  ans(size, 0);
@@ -205,6 +206,7 @@ std::vector<double> cg(std::vector<std::vector<double>> &A, std::vector<double> 
         }
         if (check(xl))
             break;
+        kmain = i+1;
     }
     return xl;
 }
@@ -221,6 +223,7 @@ double vectorNevyazki(std::vector<std::vector<double>> &matrix,const std::vector
 int main()
 {
     std::vector<std::vector<double>> matrix = generateMatrix(size);
+    std::vector<std::vector<double>> matrixClone = matrix;
     std::vector<double> x = generateVectorF(size);
     std::vector<double> f = multiply(matrix, x);
     std::vector<double> xZero(size, 0);
@@ -234,11 +237,11 @@ int main()
     const int time2 = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 
     std::cout << "cg" << "\n";
-
+    std::cout << "iternatin number " << kmain << std::endl;
     std::cout << "5 cordinats of solution ";
     print5(x_);
     std::cout << "otnositelnaya pogreshnost " << relativeError(x_, x) << "\n";
-    std::cout << "Norma vectora nevyazki " << vectorNevyazki(matrix, x_, f) << "\n";
+    std::cout << "Norma vectora nevyazki " << vectorNevyazki(matrixClone, x_, f) << "\n";
     std::cout << "Runtime " << time1 << " ms\n";
 
     std::cout << "LDL\n";
@@ -247,7 +250,7 @@ int main()
     print5(y);
 
     std::cout << "Otnositelnaya pogreshnost " << relativeError(y, x) << "\n";
-    std::cout << "Norma vectora nevyazki " << vectorNevyazki(matrix, y, f) << "\n";
+    std::cout << "Norma vectora nevyazki " << vectorNevyazki(matrixClone, y, f) << "\n";
     std::cout << "Runtime " << time2 << " ms\n";
     return 0;
 }
